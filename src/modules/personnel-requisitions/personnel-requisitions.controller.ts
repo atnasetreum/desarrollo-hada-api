@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { PersonnelRequisitionsService } from './personnel-requisitions.service';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import {
   CreatePersonnelRequisitionDto,
   FindAllPersonnelRequisitionsDto,

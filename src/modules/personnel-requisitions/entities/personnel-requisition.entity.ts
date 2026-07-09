@@ -9,12 +9,12 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { ReasonForRequest } from 'src/modules/reasons-for-request/entities/reasons-for-request.entity';
-import { Workplace } from 'src/modules/workplaces/entities/workplace.entity';
-import { Project } from 'src/modules/projects/entities/project.entity';
-import { Employee, EmployeePosition } from 'src/modules/employees/entities';
-import { User } from 'src/modules/users/entities/user.entity';
-import { Area } from 'src/modules/areas/entities/area.entity';
+import { ReasonForRequest } from '@/modules/reasons-for-request/entities/reasons-for-request.entity';
+import { Workplace } from '@/modules/workplaces/entities/workplace.entity';
+import { Project } from '@/modules/projects/entities/project.entity';
+import { Employee, EmployeePosition } from '@/modules/employees/entities';
+import { User } from '@/modules/users/entities/user.entity';
+import { Area } from '@/modules/areas/entities/area.entity';
 
 @Entity('personnel_requisitions')
 export class PersonnelRequisition {

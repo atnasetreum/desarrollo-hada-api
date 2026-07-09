@@ -10,8 +10,8 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { PositionConfiguration } from 'src/modules/position-configurations/entities/position-configuration.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { PositionConfiguration } from '@/modules/position-configurations/entities/position-configuration.entity';
+import { User } from '@/modules/users/entities/user.entity';
 import { Employee } from './employee.entity';
 
 @Entity({

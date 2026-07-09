@@ -16,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { rename } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import {
   CreateNonconformanceReportDto,
   ExportNonconformanceReportsExcelDto,
@@ -116,7 +116,7 @@ export class NonconformanceReportsController {
 
       try {
         await rename(currentPath, finalPath);
-      } catch (error) {
+      } catch {
         throw new InternalServerErrorException(
           'No fue posible guardar la imagen de evidencia con extensión válida.',
         );

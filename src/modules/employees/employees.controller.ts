@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
 import { EmployeesService } from './employees.service';
 

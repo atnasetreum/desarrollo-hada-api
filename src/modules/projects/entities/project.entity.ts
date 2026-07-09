@@ -8,26 +8,26 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '@/modules/users/entities/user.entity';
 
 @Entity('projects')
 export class Project {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number = undefined as unknown as number;
   @Column({ length: 100, unique: true })
-  name: string;
+  name: string = undefined as unknown as string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date = undefined as unknown as Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date = undefined as unknown as Date;
 
   @DeleteDateColumn()
   deletedAt?: Date;
 
   @ManyToOne(() => User)
-  createdBy: User;
+  createdBy: User = undefined as unknown as User;
 
   @ManyToOne(() => User)
   updatedBy?: User;

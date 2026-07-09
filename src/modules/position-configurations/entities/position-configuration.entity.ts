@@ -10,15 +10,15 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { EmployeePosition } from 'src/modules/employees/entities';
-import { User } from 'src/modules/users/entities/user.entity';
+import { EmployeePosition } from '@/modules/employees/entities';
+import { User } from '@/modules/users/entities/user.entity';
 
 @Entity({
   name: 'position_configurations',
 })
 export class PositionConfiguration {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number = undefined as unknown as number;
 
   @Column({
     type: 'int',
@@ -27,22 +27,22 @@ export class PositionConfiguration {
       to: (value: number) => Math.floor(value),
     },
   })
-  responseTimeInDays: number;
+  responseTimeInDays: number = undefined as unknown as number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt: Date = undefined as unknown as Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt: Date = undefined as unknown as Date;
 
   @DeleteDateColumn()
   deletedAt?: Date;
 
   @ManyToOne(() => User)
-  createdBy: User;
+  createdBy: User = undefined as unknown as User;
 
   @ManyToOne(() => User)
-  updatedBy: User;
+  updatedBy: User = undefined as unknown as User;
 
   @ManyToOne(() => User)
   deletedBy?: User;
@@ -52,5 +52,5 @@ export class PositionConfiguration {
     (employeePosition) => employeePosition.config,
   )
   @JoinColumn()
-  position: EmployeePosition;
+  position: EmployeePosition = undefined as unknown as EmployeePosition;
 }

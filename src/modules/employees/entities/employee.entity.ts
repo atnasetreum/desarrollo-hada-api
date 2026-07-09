@@ -8,8 +8,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { PersonnelRequisition } from 'src/modules/personnel-requisitions/entities/personnel-requisition.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { PersonnelRequisition } from '@/modules/personnel-requisitions/entities/personnel-requisition.entity';
+import { User } from '@/modules/users/entities/user.entity';
 import { EmployeePosition } from './employee-position.entity';
 import { EmployeeGenre } from './employee-genre.entity';
 import { EmployeeArea } from './employee-area.entity';

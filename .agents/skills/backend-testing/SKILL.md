@@ -6,9 +6,7 @@ metadata:
   platforms: Claude, ChatGPT, Gemini
 ---
 
-
 # Backend Testing
-
 
 ## When to use this skill
 
@@ -25,11 +23,13 @@ Specific situations that should trigger this skill:
 Format and required/optional information to collect from the user:
 
 ### Required information
+
 - **Framework**: Express, Django, FastAPI, Spring Boot, etc.
 - **Test tool**: Jest, Pytest, Mocha/Chai, JUnit, etc.
 - **Test target**: API endpoints, business logic, DB operations, etc.
 
 ### Optional information
+
 - **Database**: PostgreSQL, MySQL, MongoDB (default: in-memory DB)
 - **Mocking library**: jest.mock, sinon, unittest.mock (default: framework built-in)
 - **Coverage target**: 80%, 90%, etc. (default: 80%)
@@ -55,41 +55,41 @@ Step-by-step task order to follow precisely.
 Install and configure the test framework and tools.
 
 **Tasks**:
+
 - Install test libraries
 - Configure test database (in-memory or separate DB)
 - Separate environment variables (.env.test)
 - Configure jest.config.js or pytest.ini
 
 **Example** (Node.js + Jest + Supertest):
+
 ```bash
 npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
 ```
 
 **jest.config.js**:
+
 ```javascript
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.test.ts'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/__tests__/**'
-  ],
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/__tests__/**'],
   coverageThreshold: {
     global: {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80
-    }
+      statements: 80,
+    },
   },
-  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup.ts']
+  setupFilesAfterEnv: ['<rootDir>/src/__tests__/setup.ts'],
 };
 ```
 
 **setup.ts** (global test configuration):
+
 ```typescript
 import { db } from '../database';
 
@@ -115,20 +115,26 @@ afterAll(async () => {
 Write unit tests for individual functions and classes.
 
 **Tasks**:
+
 - Test pure functions (no dependencies)
 - Isolate dependencies via mocking
 - Test edge cases (boundary values, exceptions)
 - AAA pattern (Arrange-Act-Assert)
 
 **Decision criteria**:
+
 - No external dependencies (DB, API) -> pure Unit Test
 - External dependencies present -> use Mock/Stub
 - Complex logic -> test various input cases
 
 **Example** (password validation function):
+
 ```typescript
 // src/utils/password.ts
-export function validatePassword(password: string): { valid: boolean; errors: string[] } {
+export function validatePassword(password: string): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
   if (password.length < 8) {
@@ -207,6 +213,7 @@ describe('validatePassword', () => {
 Write integration tests for API endpoints.
 
 **Tasks**:
+
 - Test HTTP requests/responses
 - Success cases (200, 201)
 - Failure cases (400, 401, 404, 500)
@@ -214,12 +221,14 @@ Write integration tests for API endpoints.
 - Input validation tests
 
 **Checklist**:
+
 - [x] Verify status code
 - [x] Validate response body structure
 - [x] Confirm database state changes
 - [x] Validate error messages
 
 **Example** (Express.js + Supertest):
+
 ```typescript
 // src/__tests__/api/auth.test.ts
 import request from 'supertest';
@@ -228,13 +237,11 @@ import { db } from '../../database';
 
 describe('POST /auth/register', () => {
   it('should register new user successfully', async () => {
-    const response = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'Password123!'
-      });
+    const response = await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'Password123!',
+    });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('user');
@@ -242,54 +249,48 @@ describe('POST /auth/register', () => {
     expect(response.body.user.email).toBe('test@example.com');
 
     // Verify the record was actually saved to DB
-    const user = await db.user.findUnique({ where: { email: 'test@example.com' } });
+    const user = await db.user.findUnique({
+      where: { email: 'test@example.com' },
+    });
     expect(user).toBeTruthy();
     expect(user.username).toBe('testuser');
   });
 
   it('should reject duplicate email', async () => {
     // Create first user
-    await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'user1',
-        password: 'Password123!'
-      });
+    await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      username: 'user1',
+      password: 'Password123!',
+    });
 
     // Second attempt with same email
-    const response = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'user2',
-        password: 'Password123!'
-      });
+    const response = await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      username: 'user2',
+      password: 'Password123!',
+    });
 
     expect(response.status).toBe(409);
     expect(response.body.error).toContain('already exists');
   });
 
   it('should reject weak password', async () => {
-    const response = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'weak'
-      });
+    const response = await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'weak',
+    });
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBeDefined();
   });
 
   it('should reject missing fields', async () => {
-    const response = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com'
-        // username, password omitted
-      });
+    const response = await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      // username, password omitted
+    });
 
     expect(response.status).toBe(400);
   });
@@ -298,22 +299,18 @@ describe('POST /auth/register', () => {
 describe('POST /auth/login', () => {
   beforeEach(async () => {
     // Create test user
-    await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'test@example.com',
-        username: 'testuser',
-        password: 'Password123!'
-      });
+    await request(app).post('/api/auth/register').send({
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'Password123!',
+    });
   });
 
   it('should login with valid credentials', async () => {
-    const response = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: 'test@example.com',
-        password: 'Password123!'
-      });
+    const response = await request(app).post('/api/auth/login').send({
+      email: 'test@example.com',
+      password: 'Password123!',
+    });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('accessToken');
@@ -322,24 +319,20 @@ describe('POST /auth/login', () => {
   });
 
   it('should reject invalid password', async () => {
-    const response = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: 'test@example.com',
-        password: 'WrongPassword123!'
-      });
+    const response = await request(app).post('/api/auth/login').send({
+      email: 'test@example.com',
+      password: 'WrongPassword123!',
+    });
 
     expect(response.status).toBe(401);
     expect(response.body.error).toContain('Invalid credentials');
   });
 
   it('should reject non-existent user', async () => {
-    const response = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: 'nonexistent@example.com',
-        password: 'Password123!'
-      });
+    const response = await request(app).post('/api/auth/login').send({
+      email: 'nonexistent@example.com',
+      password: 'Password123!',
+    });
 
     expect(response.status).toBe(401);
   });
@@ -351,12 +344,14 @@ describe('POST /auth/login', () => {
 Test JWT tokens and role-based access control.
 
 **Tasks**:
+
 - Confirm 401 when accessing without a token
 - Confirm successful access with a valid token
 - Test expired token handling
 - Role-based permission tests
 
 **Example**:
+
 ```typescript
 describe('Protected Routes', () => {
   let accessToken: string;
@@ -364,35 +359,29 @@ describe('Protected Routes', () => {
 
   beforeEach(async () => {
     // Regular user token
-    const userResponse = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'user@example.com',
-        username: 'user',
-        password: 'Password123!'
-      });
+    const userResponse = await request(app).post('/api/auth/register').send({
+      email: 'user@example.com',
+      username: 'user',
+      password: 'Password123!',
+    });
     accessToken = userResponse.body.accessToken;
 
     // Admin token
-    const adminResponse = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: 'admin@example.com',
-        username: 'admin',
-        password: 'Password123!'
-      });
+    const adminResponse = await request(app).post('/api/auth/register').send({
+      email: 'admin@example.com',
+      username: 'admin',
+      password: 'Password123!',
+    });
     // Update role to 'admin' in DB
     await db.user.update({
       where: { email: 'admin@example.com' },
-      data: { role: 'admin' }
+      data: { role: 'admin' },
     });
     // Log in again to get a new token
-    const loginResponse = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: 'admin@example.com',
-        password: 'Password123!'
-      });
+    const loginResponse = await request(app).post('/api/auth/login').send({
+      email: 'admin@example.com',
+      password: 'Password123!',
+    });
     adminToken = loginResponse.body.accessToken;
   });
 
@@ -407,8 +396,7 @@ describe('Protected Routes', () => {
     });
 
     it('should reject request without token', async () => {
-      const response = await request(app)
-        .get('/api/auth/me');
+      const response = await request(app).get('/api/auth/me');
 
       expect(response.status).toBe(401);
     });
@@ -424,7 +412,9 @@ describe('Protected Routes', () => {
 
   describe('DELETE /api/users/:id (Admin only)', () => {
     it('should allow admin to delete user', async () => {
-      const targetUser = await db.user.findUnique({ where: { email: 'user@example.com' } });
+      const targetUser = await db.user.findUnique({
+        where: { email: 'user@example.com' },
+      });
 
       const response = await request(app)
         .delete(`/api/users/${targetUser.id}`)
@@ -434,7 +424,9 @@ describe('Protected Routes', () => {
     });
 
     it('should forbid non-admin from deleting user', async () => {
-      const targetUser = await db.user.findUnique({ where: { email: 'user@example.com' } });
+      const targetUser = await db.user.findUnique({
+        where: { email: 'user@example.com' },
+      });
 
       const response = await request(app)
         .delete(`/api/users/${targetUser.id}`)
@@ -451,23 +443,28 @@ describe('Protected Routes', () => {
 Mock external dependencies to isolate tests.
 
 **Tasks**:
+
 - Mock external APIs
 - Mock email sending
 - Mock file system
 - Mock time-related functions
 
 **Example** (mocking an external API):
+
 ```typescript
 // src/services/emailService.ts
-export async function sendVerificationEmail(email: string, token: string): Promise<void> {
+export async function sendVerificationEmail(
+  email: string,
+  token: string,
+): Promise<void> {
   const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}` },
+    headers: { Authorization: `Bearer ${process.env.SENDGRID_API_KEY}` },
     body: JSON.stringify({
       to: email,
       subject: 'Verify your email',
-      html: `<a href="https://example.com/verify?token=${token}">Verify</a>`
-    })
+      html: `<a href="https://example.com/verify?token=${token}">Verify</a>`,
+    }),
   });
 
   if (!response.ok) {
@@ -489,30 +486,30 @@ describe('sendVerificationEmail', () => {
   it('should send email successfully', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      status: 200
+      status: 200,
     });
 
-    await expect(sendVerificationEmail('test@example.com', 'token123'))
-      .resolves
-      .toBeUndefined();
+    await expect(
+      sendVerificationEmail('test@example.com', 'token123'),
+    ).resolves.toBeUndefined();
 
     expect(fetch).toHaveBeenCalledWith(
       'https://api.sendgrid.com/v3/mail/send',
       expect.objectContaining({
-        method: 'POST'
-      })
+        method: 'POST',
+      }),
     );
   });
 
   it('should throw error if email sending fails', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
-      status: 500
+      status: 500,
     });
 
-    await expect(sendVerificationEmail('test@example.com', 'token123'))
-      .rejects
-      .toThrow('Failed to send email');
+    await expect(
+      sendVerificationEmail('test@example.com', 'token123'),
+    ).rejects.toThrow('Failed to send email');
   });
 });
 ```
@@ -615,11 +612,13 @@ Rules and prohibitions that must be strictly followed.
 **Situation**: Testing a FastAPI REST API
 
 **User request**:
+
 ```
 Test the user API built with FastAPI using pytest.
 ```
 
 **Final result**:
+
 ```python
 # tests/conftest.py
 import pytest
@@ -736,6 +735,7 @@ def test_protected_route_with_token(client):
    - Naturally achieves high coverage
 
 2. **Given-When-Then pattern**: Write tests in BDD style
+
    ```typescript
    it('should return 404 when user not found', async () => {
      // Given: a non-existent user ID
@@ -754,7 +754,7 @@ def test_protected_route_with_token(client):
    const validUser = {
      email: 'test@example.com',
      username: 'testuser',
-     password: 'Password123!'
+     password: 'Password123!',
    };
    ```
 
@@ -773,6 +773,7 @@ def test_protected_route_with_token(client):
 **Cause**: DB state shared due to missing beforeEach/afterEach
 
 **Fix**:
+
 ```typescript
 beforeEach(async () => {
   await db.migrate.rollback();
@@ -787,6 +788,7 @@ beforeEach(async () => {
 **Cause**: DB connections, servers, etc. not cleaned up
 
 **Fix**:
+
 ```typescript
 afterAll(async () => {
   await db.destroy();
@@ -801,10 +803,11 @@ afterAll(async () => {
 **Cause**: Missing async/await or unhandled Promise
 
 **Fix**:
+
 ```typescript
 // Bad
 it('should work', () => {
-  request(app).get('/users');  // Promise not handled
+  request(app).get('/users'); // Promise not handled
 });
 
 // Good
@@ -816,15 +819,18 @@ it('should work', async () => {
 ## References
 
 ### Official docs
+
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
 - [Pytest Documentation](https://docs.pytest.org/)
 - [Supertest GitHub](https://github.com/visionmedia/supertest)
 
 ### Learning resources
+
 - [Testing JavaScript with Kent C. Dodds](https://testingjavascript.com/)
 - [Test-Driven Development by Example (Kent Beck)](https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530)
 
 ### Tools
+
 - [Istanbul/nyc](https://istanbul.js.org/) - code coverage
 - [nock](https://github.com/nock/nock) - HTTP mocking
 - [faker.js](https://fakerjs.dev/) - test data generation
@@ -832,13 +838,16 @@ it('should work', async () => {
 ## Metadata
 
 ### Version
+
 - **Current version**: 1.0.0
 - **Last updated**: 2025-01-01
 - **Compatible platforms**: Claude, ChatGPT, Gemini
 
 ### Related skills
+
 - [api-design](../api-design/SKILL.md): Design APIs alongside tests
 - [authentication-setup](../authentication/SKILL.md): Test authentication systems
 
 ### Tags
+
 `#testing` `#backend` `#Jest` `#Pytest` `#unit-test` `#integration-test` `#TDD` `#API-test`

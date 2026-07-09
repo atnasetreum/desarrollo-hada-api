@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { PositionConfigurationsService } from './position-configurations.service';
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import {
   CreatePositionConfigurationDto,
   FindAllPositionConfigurationsDto,

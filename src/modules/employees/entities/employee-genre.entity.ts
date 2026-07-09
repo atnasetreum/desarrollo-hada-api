@@ -9,7 +9,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '@/modules/users/entities/user.entity';
 import { Employee } from './employee.entity';
 
 @Entity({ name: 'employee_genres' })

@@ -3,7 +3,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
 import { DataSource, Repository } from 'typeorm';
 
-import { HALLAZGOS_DATA_SOURCE_DB } from 'src/constants';
+import { HALLAZGOS_DATA_SOURCE_DB } from '@/constants';
 import {
   Employee,
   EmployeeArea,

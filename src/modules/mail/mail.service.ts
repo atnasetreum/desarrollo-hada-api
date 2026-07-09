@@ -6,7 +6,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { PersonnelRequisition } from '../personnel-requisitions/entities/personnel-requisition.entity';
 import { NonconformanceReport } from '../nonconformance-reports/entities/nonconformance-report.entity';
-import { NODE_ENV_DEVELOPMENT } from 'src/constants';
+import { NODE_ENV_DEVELOPMENT } from '@/constants';
 
 @Injectable()
 export class MailService {
@@ -54,7 +54,7 @@ export class MailService {
       return ['eduardo-266@hotmail.com'];
     }
 
-    return ['strujillo@hadamexico.com'];
+    return ['strujillo@hadamexico.com', 'sst@hadamexico.com'];
   }
 
   private resolveEvidenceAbsolutePath(imageUrl: string): string {
