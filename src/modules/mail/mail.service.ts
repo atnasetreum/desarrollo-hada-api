@@ -54,7 +54,8 @@ export class MailService {
       return ['eduardo-266@hotmail.com'];
     }
 
-    return ['strujillo@hadamexico.com', 'sst@hadamexico.com'];
+    //return ['strujillo@hadamexico.com', 'sst@hadamexico.com'];
+    return ['sst@hadamexico.com'];
   }
 
   private resolveEvidenceAbsolutePath(imageUrl: string): string {
