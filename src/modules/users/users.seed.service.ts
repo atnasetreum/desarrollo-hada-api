@@ -51,7 +51,7 @@ export class UsersSeedService implements OnApplicationBootstrap {
       ['/dashboard']: [],
       '/requisicion-de-personal': ['applicant', 'approve-request', 'recruiter'],
       '/configuraciones': [
-        { '/tiempos-de-respuesta': [], '/colaboradores': [] },
+        { '/tiempos-de-respuesta': [], '/colaboradores': [], '/usuarios': [] },
       ],
     };
 
